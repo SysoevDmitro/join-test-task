@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     'django_filters',
     "debug_toolbar",
+    'event',
     'user'
 ]
 
@@ -60,7 +61,7 @@ MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware'
 ]
 
-ROOT_URLCONF = 'event.urls'
+ROOT_URLCONF = 'event_service.urls'
 
 TEMPLATES = [
     {
@@ -78,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'event.wsgi.application'
+WSGI_APPLICATION = 'event_service.wsgi.application'
 
 
 # Database
@@ -134,6 +135,7 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
