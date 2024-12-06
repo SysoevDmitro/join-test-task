@@ -52,11 +52,17 @@ This project is a Django-based RESTful API for managing events (conferences, mee
 5. **Create .env file with your parameters:**
    ```
     SECRET_KEY=
-    POSTGRES_PASSWORD=
-    POSTGRES_USER=
-    POSTGRES_DB=
-    POSTGRES_HOST=
-    POSTGRES_PORT=
+    POSTGRES_PASSWORD=password
+    POSTGRES_USER=event
+    POSTGRES_DB=event
+    POSTGRES_HOST=db
+    POSTGRES_PORT=5432
+    
+    CELERY_BROKER_URL=redis://redis:6379/0
+    CELERY_RESULT_BACKEND=redis://redis:6379/0
+    
+    EMAIL_HOST_USER=your_email@example.com
+    EMAIL_HOST_PASSWORD=your_email_password
 
    ```
 
