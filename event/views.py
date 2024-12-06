@@ -1,13 +1,19 @@
-from rest_framework import viewsets, permissions, generics, status
+from django.shortcuts import get_object_or_404
+from rest_framework import viewsets, permissions, generics, status, filters
 from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
 from .serializers import EventSerializer, EventRegistrationSerializer, EventRegistrationListSerializer
 from .models import Event, EventRegistration
+from .tasks import send_registration_email
 
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = EventSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_fields = ['location', 'date']
+    search_fields = ['title', 'description']
 
     def update(self, request, *args, **kwargs):
         event = self.get_object()
@@ -38,9 +44,14 @@ class EventRegistrationView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         event_id = request.data.get("event")
         user = request.user
+        event = get_object_or_404(Event, id=event_id)
+
         if event_id and Event.objects.filter(id=event_id).exists():
             if EventRegistration.objects.filter(event_id=event_id, user=user).exists():
                 return Response({"error": "You are already already registered for this event"}, status=400)
+
+            send_registration_email.delay(user.email, event.title)
+
             return super().post(request, *args, **kwargs)
         return Response({"error": "Event not found"}, status=404)
 
