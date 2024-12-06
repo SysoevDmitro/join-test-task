@@ -13,3 +13,11 @@ class EventRegistrationSerializer(serializers.ModelSerializer):
         model = EventRegistration
         fields = ['event', 'user', 'registered_at']
         read_only_fields = ['user', 'registered_at']
+
+
+class EventRegistrationListSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+
+    class Meta:
+        model = EventRegistration
+        fields = ['user', 'registered_at']
